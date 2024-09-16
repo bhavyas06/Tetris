@@ -1,6 +1,6 @@
 const SQ = 20;
 
-const cvs = document.getElementById('canvas');
+const cvs = document.getElementById('tetris');
 const ctx = cvs.getContext('2d');
 
 function drawSquare(x, y, color) {
