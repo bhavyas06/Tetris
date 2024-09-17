@@ -81,3 +81,36 @@ function CONTROL(event) {
     else if(event.keyCode == 40)
         piece.moveDown();
 }
+
+Piece.prototype.moveLeft() = function() {
+    if(!this.collision(-1, 0, this.activeTetromino)) {
+        this.unDraw();
+        this.x--;
+        this.draw();
+    }
+    else {
+        // later
+    }
+}
+
+Piece.prototype.moveRight = function() {
+    if(!this.collision(1, 0, this.activeTetromino)) {
+        this.unDraw();
+        this.x++;
+        this.draw();
+    }
+    else {
+        // later
+    }
+}
+
+Piece.prototype.moveDown = function() {
+    if(!this.collision(0, 1, this.activeTetromino)) {
+        this.unDraw();
+        this.y++;
+        this.draw();
+    }
+    else {
+        // later
+    }
+}
