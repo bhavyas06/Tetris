@@ -30,3 +30,18 @@ function drawBoard() {
 }
 
 drawBoard();
+
+// Pieces
+const Z = [ [ [1,1,0], [0,1,1], [0,0,0] ], 
+            [ [0,0,1], [0,1,1], [0,1,0] ],
+            [ [0,0,0], [1,1,0], [0,1,1] ],
+            [ [0,1,0], [1,1,0], [1,0,0] ] ];
+
+let piece = Z[0];
+const pieceColor = "blue";
+for(r=0; r<piece.length; r++) {
+    for(c=0; c<piece.length; c++) {
+        if(piece[r][c])
+            drawSquare(c, r, pieceColor); 
+    }
+}
