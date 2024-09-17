@@ -28,3 +28,5 @@ function drawBoard() {
             drawSquare(c, r, board[r][c]);
     }
 }
+
+drawBoard();
