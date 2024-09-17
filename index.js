@@ -137,3 +137,11 @@ Piece.prototype.collision = function(x, y, piece) {
     }
     return false;
 }
+
+//  Rotate the piece
+Piece.prototype.rotate = function() {
+    this.unDraw();
+    this.tetrominoN = (this.tetrominoN + 1) % this.tetromino.length;
+    this.activeTetromino = this.tetromino[this.tetrominoN];
+    this.draw();
+}
