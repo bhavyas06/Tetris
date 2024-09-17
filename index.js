@@ -114,3 +114,26 @@ Piece.prototype.moveDown = function() {
         // later
     }
 }
+
+Piece.prototype.collision = function(x, y, piece) {
+    for(r=0; r<piece.length; r++) {
+        for(c=0; c<piece.length; c++) {
+            // continue if the square is vacant
+            if(!piece[r][c])
+                continue;
+
+            let newX = this.x + x + c;
+            let newY = this.y + y + r;
+
+            // check boundries
+            if(newX < 0 || nexX >= Col || newY >= Row)
+                return true;
+            // we skip this else piece[-1][x] will crash the game
+            if(newY < 0)
+                continue;
+            if(board[newY][newX] != Vacant)
+                return true;
+        }
+    }
+    return false;
+}
