@@ -4,20 +4,42 @@ const scoreElement = document.getElementById("score");
 
 const ROW = 20;
 const COL = COLUMN = 10;
-const SQ = squareSize = 20;
-const VACANT = "WHITE"; // color of an empty square
+const SQ = squareSize = 30;
+const ISQ = 20;
+const VACANT = "#e1eeb0"; // color of an empty square
+
+let currentLevel = 0;
+let linesCleared = 0;
 
 // draw a square
-function drawSquare(x,y,color){
-    ctx.fillStyle = color;
-    ctx.fillRect(x*SQ,y*SQ,SQ,SQ);
+function drawSquare(x,y,color, innerColor) {
+    ctx.clearRect(x * SQ, y * SQ, SQ, SQ);
 
-    ctx.strokeStyle = "BLACK";
-    ctx.strokeRect(x*SQ,y*SQ,SQ,SQ);
+    if(color != VACANT) {
+        ctx.fillStyle = color;
+        ctx.fillRect(x*SQ,y*SQ,SQ,SQ);
+
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = VACANT;
+        ctx.strokeRect(x*SQ,y*SQ,SQ,SQ);
+
+        if(innerColor) {
+            const innerOffset = SQ / 4;
+            const innerSize = SQ/2;
+            ctx.fillStyle = innerColor;
+            ctx.fillRect(x * SQ + innerOffset, y * SQ + innerOffset, innerSize, innerSize);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "black";
+            ctx.strokeRect(x * SQ + innerOffset, y * SQ + innerOffset, innerSize, innerSize);
+        }
+    }
+    else {
+        ctx.fillStyle = VACANT;
+        ctx.fillRect(x*SQ,y*SQ,SQ,SQ);
+    }
 }
 
 // create the board
-
 let board = [];
 for( r = 0; r <ROW; r++){
     board[r] = [];
@@ -29,8 +51,11 @@ for( r = 0; r <ROW; r++){
 // draw the board
 function drawBoard(){
     for( r = 0; r <ROW; r++){
-        for(c = 0; c < COL; c++){
-            drawSquare(c,r,board[r][c]);
+        for(c = 0; c < COL; c++) {
+            const cell1 = board[r][c];
+            const color = cell1.color || VACANT;
+            const innerColor = cell1.innerColor || VACANT;
+            drawSquare(c,r, color, innerColor);
         }
     }
 }
@@ -39,26 +64,35 @@ drawBoard();
 
 // the pieces and their colors
 const PIECES = [
-    [Z,"red"],
-    [S,"green"],
-    [T,"yellow"],
-    [O,"blue"],
-    [L,"purple"],
-    [I,"cyan"],
-    [J,"orange"]
+    [Z,"#dca3ff"],
+    [S,"#ff90a0"],
+    [T,"#80ffb4"],
+    [O,"#ff7666"],
+    [L,"#70b3f5"],
+    [I,"#b2e77d"],
+    [J,"#ffd700"]
+];
+
+const INNER_PIECE = [
+    [Z,"green"],
+    [S,"yellow"],
+    [T,"blue"],
+    [O,"purple"],
+    [L,"cyan"],
+    [I,"orange"],
+    [J,"red"]
 ];
 
 // generate random pieces
 function randomPiece(){
     let r = randomN = Math.floor(Math.random() * PIECES.length) // 0 -> 6
-    return new Piece( PIECES[r][0],PIECES[r][1]);
+    return new Piece( PIECES[r][0],PIECES[r][1], INNER_PIECE[r][1]);
 }
 
 let p = randomPiece();
 
 // The Object Piece
-
-function Piece(tetromino,color){
+function Piece(tetromino,color, innerColor){
     this.tetromino = tetromino;
     this.color = color;
     
@@ -68,15 +102,17 @@ function Piece(tetromino,color){
     // we need to control the pieces
     this.x = 3;
     this.y = -2;
+
+    this.innerColor = innerColor;
 }
 
 // fill function
-Piece.prototype.fill = function(color){
+Piece.prototype.fill = function(color, innerColor){
     for( r = 0; r < this.activeTetromino.length; r++){
         for(c = 0; c < this.activeTetromino.length; c++){
             // we draw only occupied squares
             if( this.activeTetromino[r][c]){
-                drawSquare(this.x + c,this.y + r, color);
+                drawSquare(this.x + c,this.y + r, color, innerColor);
             }
         }
     }
@@ -84,12 +120,12 @@ Piece.prototype.fill = function(color){
 
 // draw a piece to the board
 Piece.prototype.draw = function(){
-    this.fill(this.color);
+    this.fill(this.color, this.innerColor);
 }
 
 // undraw a piece
 Piece.prototype.unDraw = function(){
-    this.fill(VACANT);
+    this.fill(VACANT, VACANT);
 }
 
 // move Down the piece
@@ -148,7 +184,62 @@ Piece.prototype.rotate = function(){
     }
 }
 
+let score = 0;
+
+Piece.prototype.lock = function(){
+    for( r = 0; r < this.activeTetromino.length; r++){
+        for(c = 0; c < this.activeTetromino.length; c++){
+            // we skip the vacant squares
+            if( !this.activeTetromino[r][c]){
+                continue;
+            }
+            // pieces to lock on top = game over
+            if(this.y + r < 0){
+                alert("Game Over");
+                // stop request animation frame
+                gameOver = true;
+                break;
+            }
+            // we lock the piece
+            board[this.y+r][this.x+c] = {
+                color: this.color,
+                innerColor: this.innerColor
+            };
+        }
+    }
+    // remove full rows
+    for(r = 0; r < ROW; r++){
+        let isRowFull = true;
+        for( c = 0; c < COL; c++){
+            isRowFull = isRowFull && (board[r][c] != VACANT);
+        }
+        if(isRowFull){
+            // if the row is full
+            // we move down all the rows above it
+            for( y = r; y > 1; y--){
+                for( c = 0; c < COL; c++){
+                    board[y][c] = board[y-1][c];
+                }
+            }
+            // the top row board[0][..] has no row above it
+            for( c = 0; c < COL; c++){
+                board[0][c] = VACANT;
+            }
+            // increment the lines cleared
+            // linesCleared += 1;
+            // increment the score
+            score += 10;
+        }
+    }
+    // update the board
+    drawBoard();
+    
+    // update the score
+    // scoreElement.innerHTML = score;
+}
+
 // collision fucntion
+
 Piece.prototype.collision = function(x,y,piece){
     for( r = 0; r < piece.length; r++){
         for(c = 0; c < piece.length; c++){
@@ -169,7 +260,7 @@ Piece.prototype.collision = function(x,y,piece){
                 continue;
             }
             // check if there is a locked piece alrady in place
-            if( board[newY][newX] != VACANT){
+            if(board[newY][newX] && board[newY][newX] != VACANT){
                 return true;
             }
         }
@@ -178,7 +269,9 @@ Piece.prototype.collision = function(x,y,piece){
 }
 
 // CONTROL the piece
+
 document.addEventListener("keydown",CONTROL);
+
 function CONTROL(event){
     if(event.keyCode == 37){
         p.moveLeft();
@@ -192,56 +285,6 @@ function CONTROL(event){
     }else if(event.keyCode == 40){
         p.moveDown();
     }
-}
-
-let score = 0;
-
-Piece.prototype.lock = function(){
-    for( r = 0; r < this.activeTetromino.length; r++){
-        for(c = 0; c < this.activeTetromino.length; c++){
-            // we skip the vacant squares
-            if( !this.activeTetromino[r][c]){
-                continue;
-            }
-            // pieces to lock on top = game over
-            if(this.y + r < 0){
-                alert("Game Over");
-                // stop request animation frame
-                gameOver = true;
-                break;
-            }
-            // we lock the piece
-            board[this.y+r][this.x+c] = this.color;
-        }
-    }
-    
-    // remove full rows
-    for(r = 0; r < ROW; r++){
-        let isRowFull = true;
-        for( c = 0; c < COL; c++){
-            isRowFull = isRowFull && (board[r][c] != VACANT);
-        }
-        if(isRowFull){
-            // if the row is full
-            // we move down all the rows above it
-            for( y = r; y > 1; y--){
-                for( c = 0; c < COL; c++){
-                    board[y][c] = board[y-1][c];
-                }
-            }
-            // the top row board[0][..] has no row above it
-            for( c = 0; c < COL; c++){
-                board[0][c] = VACANT;
-            }
-            // increment the score
-            score += 10;
-        }
-    }
-    // update the board
-    drawBoard();
-    
-    // update the score
-    scoreElement.innerHTML = score;
 }
 
 // drop the piece every 1sec
