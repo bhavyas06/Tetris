@@ -1,13 +1,12 @@
 const cvs = document.getElementById("tetris");
 const ctx = cvs.getContext("2d");
-const scoreElement = document.getElementById("score");
 
 const ROW = 20;
 const COL = COLUMN = 10;
 const SQ = squareSize = 30;
-const ISQ = 20;
 const VACANT = "#e1eeb0"; // color of an empty square
 
+let score = 0;
 let currentLevel = 0;
 let linesCleared = 0;
 
@@ -62,22 +61,23 @@ function drawBoard(){
 
 drawBoard();
 
+// #0a1d7b
 // the pieces and their colors
 const PIECES = [
     [Z,"#dca3ff"],
     [S,"#ff90a0"],
     [T,"#80ffb4"],
-    [O,"#ff7666"],
+    [O,"purple"],
     [L,"#70b3f5"],
     [I,"#b2e77d"],
     [J,"#ffd700"]
 ];
 
 const INNER_PIECE = [
-    [Z,"green"],
+    [Z,"#dca3ff"],
     [S,"yellow"],
     [T,"blue"],
-    [O,"purple"],
+    [O,"#ff7666"],
     [L,"cyan"],
     [I,"orange"],
     [J,"red"]
@@ -184,9 +184,10 @@ Piece.prototype.rotate = function(){
     }
 }
 
-let score = 0;
+Piece.prototype.lock = function() {
+    let nextPiece = randomPiece();
+    showPiece();
 
-Piece.prototype.lock = function(){
     for( r = 0; r < this.activeTetromino.length; r++){
         for(c = 0; c < this.activeTetromino.length; c++){
             // we skip the vacant squares
@@ -207,6 +208,7 @@ Piece.prototype.lock = function(){
             };
         }
     }
+
     // remove full rows
     for(r = 0; r < ROW; r++){
         let isRowFull = true;
@@ -225,8 +227,6 @@ Piece.prototype.lock = function(){
             for( c = 0; c < COL; c++){
                 board[0][c] = VACANT;
             }
-            // increment the lines cleared
-            // linesCleared += 1;
             // increment the score
             score += 10;
         }
@@ -235,7 +235,7 @@ Piece.prototype.lock = function(){
     drawBoard();
     
     // update the score
-    // scoreElement.innerHTML = score;
+    scoreShow.innerHTML = score;
 }
 
 // collision fucntion
