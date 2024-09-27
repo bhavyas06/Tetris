@@ -39,16 +39,35 @@
                 </div>
                 <div id="show">0</div>
 
-                <div class="new">
-                    <div id="tetrimino"></div>
-                </div>
-                
+                <div class="max_score"></div>
+                <div class="maxInnerScore">Max Score</div>
             </div>
+            <div id="show1">0</div>
+
+            <div class="pause">
+                <div id="pause-pop" class="popup">
+                    <div class="content">
+                        <div class="close-btn" onclick="togglePause()">x</div>
+                        <p>Menu</p>
+                        <a><button>Resume Game</button></a>
+                        <a href="./mainPage.html"><button>End Game</button></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="Pause">
+                <div class="inner">
+                    <a onclick="togglePause()" id="loginBtn">
+                        <button>Pause Game</button>
+                    </a>
+                </div>
+            </div>
+
         </div>
 
     </div>
 
-
+    <script src="login.js"></script>
     <script src="pieces.js"></script>
     <script src="index.js"></script>
 </body>
