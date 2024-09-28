@@ -15,57 +15,58 @@
         </div>
 
         <div class="sign">
-
             <div id="popup-1" class="popup">
-            <div class="content">
-              <div class="close-btn" onclick="togglePopup()">x</div>
-              <p class="log1">Log In</p>
-              <div class="input-field"><input id="loginEmail" placeholder="Email" class="validate" type="email"></div>
-              <div class="input-field"><input id="loginPassword" type="password" placeholder="Password" class="validate"></div>
-              <button class="second-button" onclick="login()">Log In</button>
-              <p>Don't have an account? <a onclick="togglePopup1()"><span
-                    style="color: blue; cursor: pointer;text-decoration: underline;">Register</span></a></p>
-            </div>
-          </div>
-  
-          <div class="popup" id="popup-2">
-            <div class="content" style="height: 600px; top: 400px;">
-              <div class="close-btn" onclick="togglePopup1()">x</div>
-  
-              <p class="log1">Create Your Account</p>
-              <div class="input-field"><input id="registerName" placeholder="Name" class="validate"></div>
-              <div class="input-field"><input id="registerEmail" placeholder="Email" class="validate" type="email" required></div>
-              <div class="input-field"><input id="registerPassword" placeholder="Password" class="validate"></div>
-              <button class="second-button" onclick="register()">Register</button>
-              <p>Already have an account? <a onclick="togglePopup()"><span
-                    style="color: blue; cursor: pointer; text-decoration: underline;">Login</span></a></p>
-            </div>
-          </div>
-          
-          <div class="login"> 
-            <div class="inner">
-                <a onclick="togglePopup()" id="loginBtn"> 
-                    <button>Log In</button>
-                </a>
-            </div>
-          </div>
-          <!-- <li><a onclick="togglePopup()" id="loginBtn" style="margin-left:-30px;cursor: pointer;">Login</a></li> -->
-
-
-            <div class="guest">
-                <div class="inner">
-                    <a href="index.html">
-                        <button>Play as Guest</button>
-                    </a>
+                <div class="content">
+                    <div class="close-btn" onclick="togglePopup()">X</div>
+                    <h2 class="log1">Log In</h2>
+                    <div class="input-field">
+                        <input id="loginEmail" placeholder="Email" class="validate" type="email" required>
+                    </div>
+                    <div class="input-field">
+                        <input id="loginPassword" type="password" placeholder="Password" class="validate" required>
+                    </div>
+                    <button class="second-button" onclick="login()">Log In</button>
+                    <p class="ques">Don't have an account? <a href="#" onclick="togglePopup1()"><span class="reg">Register</span></a></p>
                 </div>
             </div>
+
+            <div id="popup-2" class="popup">
+                <div class="content">
+                    <div class="close-btn" onclick="togglePopup1()">×</div>
+                    <h2 class="log1">Create Your Account</h2>
+                    <div class="input-field">
+                        <input id="registerName" placeholder="Name" class="validate" type="text" required>
+                    </div>
+                    <div class="input-field">
+                        <input id="registerEmail" placeholder="Email" class="validate" type="email" required>
+                    </div>
+                    <div class="input-field">
+                        <input id="registerPassword" placeholder="Password" class="validate" type="password" required>
+                    </div>
+                    <button class="second-button" onclick="register()">Register</button>
+                    <p class="ques">Already have an account? <a href="#" onclick="togglePopup()"><span class="reg">Login</span></a></p>
+                </div>
+            </div>
+
+            <div class="login"> 
+                <div class="inner">
+                    <button onclick="togglePopup()" id="loginBtn">Log In</button>
+                </div>
+            </div>
+
+            <div class="login">
+                <div class="inner">
+                    <button id="gu" onclick="playAsGuest()">Play as Guest</button>
+                </div>
+            </div>
+            
         </div>
 
         <div class="image1">
-            <img src="Photos/Screenshot (508).png">
-            <img src="Photos/Screenshot (509).png">
-            <img src="Photos/Screenshot (508).png">
-            <img src="Photos/Screenshot (509).png">
+            <img src="Photos/Screenshot (508).png" alt="Screenshot 1">
+            <img src="Photos/Screenshot (509).png" alt="Screenshot 2">
+            <img src="Photos/Screenshot (508).png" alt="Screenshot 3">
+            <img src="Photos/Screenshot (509).png" alt="Screenshot 4">
         </div>
     </div>   
 
