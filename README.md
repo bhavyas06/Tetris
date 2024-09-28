@@ -27,7 +27,7 @@ To run this project locally-
 git clone https://github.com/bhavyas06/Tetris.git
 ```
 2. Navigate to the project directory.
-3. Open index.html in your browser.  Alternatively, you can host the project on a local server using any web server software like live-server.
+3. Open mainPage.html in your browser.  Alternatively, you can host the project on a local server using any web server software like live-server.
 
 ## How to Play
 1. Upon launching the game, you can log in or register a new account.<br/>
