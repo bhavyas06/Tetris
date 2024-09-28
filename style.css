@@ -429,18 +429,16 @@ canvas {
 }
 
 /* Mobile Controls */
-.mobile-controls {
+.mobile-controls, .mobile-controls1 {
     display: none;
     flex-direction: column;
     position: fixed;
-    bottom: 10px;
-    right: 10px;
     gap: 10px;
 }
 
-.mobile-controls button {
-    width: 60px;
-    height: 60px;
+.mobile-controls button, .mobile-controls1 button {
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     border: none;
     background-color: #e1eeb0;
@@ -448,21 +446,36 @@ canvas {
     cursor: pointer;
 }
 
-.mobile-controls .left-right {
+.mobile-score {
+    display: none; /* Hidden by default, will show on mobile */
+    position: fixed;
+    top: 0;
+    left: 220px;
+    right: -240px;
+    transform: translateX(-50%);
+    background-color: #281f3a;
+    color: white;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 1000;
+}
+
+.mobile-score-text {
     display: flex;
-    gap: 10px;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Media Queries for Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 426px) {
     .container {
         flex-direction: column;
         align-items: center;
     }
 
-    .controls, .score-board {
-        max-width: none;
-        width: 90%;
+    .score-board {
+        display: none;
     }
 
     canvas {
@@ -471,7 +484,51 @@ canvas {
         height: auto;
     }
 
+    /* Hide desktop controls */
+    #control-div {
+        display: none;
+    }
+
+    /* Ensure the canvas is positioned correctly */
+    #tetris {
+        padding-top: 0;
+        position: absolute;
+        left: 10;
+        right: 10;
+        bottom: 0;
+    }
+
+    /* Buttons positioned at the bottom */
     .mobile-controls {
+        padding: 10px;
         display: flex;
+        position: fixed;
+        right: -4px;
+        bottom: 220px;
+    }
+
+    /* Buttons positioned at the top left */
+    .mobile-controls1 {
+        padding: 10px;
+        display: flex;
+        position: fixed;
+        left: -4px;
+        top: 260px;
+    }
+
+    /* Adjust button size */
+    .mobile-controls button, .mobile-controls1 button {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .mobile-score {
+        display: flex;
+    }
+
+    .mobile-score span {
+        margin: 0 5px;
     }
 }

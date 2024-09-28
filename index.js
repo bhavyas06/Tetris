@@ -27,7 +27,7 @@ const maxScoreShow = document.getElementById("show1");
 const next = document.getElementById("tetrimino");
 
 let score = 0;
-let max_score = localStorage.getItem('MaxScore');
+let max_score = 0;
 
 // draw a square
 function drawSquare(x,y,color, innerColor) {
@@ -244,21 +244,11 @@ Piece.prototype.lock = function() {
                 board[0][c] = VACANT;
             }
             // increment the score
-            score += 10;
-            if(playAsGuest1)
-                max_score = score;
-            if(isloggedIn) {
-                max_score = localStorage.getItem("MaxScore");
-                localStorage.setItem("MaxScore", max_score);
-            }
+            updateScore(score + 10);
         }
     }
     // update the board
     drawBoard();
-    
-    // update the score
-    scoreShow.innerHTML = score;
-    maxScoreShow.innerHTML = max_score;
 }
 
 //Game Over popup
@@ -401,4 +391,61 @@ function togglePause() {
 function toggleEnd() {
     var popup = document.getElementById("end-pop");
     popup.classList.toggle("active");
+}
+
+// Reference to mobile buttons
+const leftButton = document.getElementById("left");
+const rightButton = document.getElementById("right");
+const rotateButton = document.getElementById("rotate");
+const downButton = document.getElementById("down");
+
+// Add event listeners to mobile buttons
+leftButton.addEventListener("click", function() {
+    p.moveLeft(); // Call the moveLeft function
+    dropStart = Date.now(); // Reset drop timer
+});
+
+rightButton.addEventListener("click", function() {
+    p.moveRight(); // Call the moveRight function
+    dropStart = Date.now(); // Reset drop timer
+});
+
+rotateButton.addEventListener("click", function() {
+    p.rotate(); // Call the rotate function
+    dropStart = Date.now(); // Reset drop timer
+});
+
+downButton.addEventListener("click", function() {
+    p.moveDown(); // Call the moveDown function
+});
+
+// Fetch max score from sessionStorage or localStorage
+if (playAsGuest1) {
+    max_score = sessionStorage.getItem('MaxScore') ? parseInt(sessionStorage.getItem('MaxScore')) : 0;
+} else if (isloggedIn) {
+    max_score = localStorage.getItem('MaxScore') ? parseInt(localStorage.getItem('MaxScore')) : 0;
+}
+
+// Function to update score and max_score
+function updateScore(newScore) {
+    score = newScore;
+
+    // Update max score based on guest or login state
+    if (playAsGuest1) {
+        if (score > max_score) {
+            max_score = score;
+            sessionStorage.setItem('MaxScore', max_score);
+        }
+    } else if (isloggedIn) {
+        if (score > max_score) {
+            max_score = score;
+            localStorage.setItem('MaxScore', max_score);
+        }
+    }
+
+    // Update the score display
+    scoreShow.innerHTML = score;
+    maxScoreShow.innerHTML = max_score;
+    // Update the mobile score display
+    document.getElementById("mobile-score-display").innerHTML = score;
 }

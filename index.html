@@ -10,7 +10,33 @@
 
 <body>
     <div class="container">
-        <div class="controls">
+        <div class="mobile-score">
+            <div class="mobile-score-text">
+                <span>Score:</span> 
+                <span id="mobile-score-display">0</span>
+            </div>
+        </div>
+        
+        <div class="mobile-controls-container">
+            <div class="mobile-controls1">
+                <div class="left-side">
+                    <button id="down">↓</button>
+                    <p></p>
+                    <button id="left">←</button>
+
+                </div>
+            </div>
+        
+            <div class="mobile-controls">
+                <div class="right-side">
+                    <button id="rotate">↑</button>
+                    <p></p>
+                    <button id="right">→</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls" id="control-div">
             <div class="arrow">
                 <h3>Controls:</h3>
                 <p>↑</p>
@@ -52,7 +78,6 @@
 
             <div id="game-pop" class="popup">
                 <div class="content">
-                    <div class="close-btn" onclick="closeGameOverPopup()">X</div>
                     <p>Game Over!</p>
                     <button onclick="startNewGame()">New Game</button>
                     <button onclick="exitToMainMenu()">End Game</button>
@@ -66,17 +91,8 @@
                 </div>
             </div>
         </div>
-
-        <!-- On-Screen Mobile Controls -->
-        <div class="mobile-controls">
-            <button id="rotate">↑</button>
-            <div class="left-right">
-                <button id="left">←</button>
-                <button id="right">→</button>
-            </div>
-            <button id="down">↓</button>
-        </div>
     </div>
+
 
     <script src="login.js"></script>
     <script src="pieces.js"></script>
