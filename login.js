@@ -21,11 +21,10 @@ function togglePopup1() {
 // Register Functionality
 function register() {
     var name = document.getElementById("registerName").value;
-    var phoneNumber = document.getElementById("registerPhoneNumber").value;
     var email = document.getElementById("registerEmail").value;
     var password = document.getElementById("registerPassword").value;
 
-    if (name === "" || phoneNumber === "" || email === "" || password === "") {
+    if (name === "" || email === "" || password === "") {
         alert("Please fill in all fields");
         return;
     }
@@ -38,7 +37,6 @@ function register() {
 
     var userData = {
         name: name,
-        phoneNumber: phoneNumber,
         email: email,
         password: password
     };
@@ -57,14 +55,16 @@ function login() {
     var userData = JSON.parse(localStorage.getItem(email));
 
     if (userData && userData.password === password) {
-        alert("Login successful");
         localStorage.setItem('isLoggedIn', 'true');
-        document.getElementById("logoutButton").style.display = "inline";
-        document.getElementById("loginBtn").style.display = "none";
+        localStorage.setItem('playAsGuest', 'false');
+
+        // document.getElementById("logoutButton").style.display = "inline";
+        // document.getElementById("loginDiv").style.display = "none";
+        window.location.href = 'index.html';  
     } else {
         alert("Invalid email or password");
+        togglePopup();
     }
-    togglePopup();
 }
 
 // Logout Functionality
@@ -87,4 +87,11 @@ function initializePage() {
         document.getElementById("logoutButton").style.display = "none";
         document.getElementById("loginBtn").style.display = "inline";
     }
+}
+
+function playAsGuest() {
+    localStorage.setItem('playAsGuest', 'true');
+    localStorage.setItem('isLoggedIn', 'false');
+
+    window.location.href = 'index.html';  
 }
