@@ -467,6 +467,14 @@ canvas {
     align-items: center;
 }
 
+.mobile-score-text button {
+    background-color: #281f3a;
+    color: white;
+    font-size: 18px;
+    position: relative;
+    margin-left: 300px;
+}
+
 /* Media Queries for Responsive Design */
 @media (max-width: 426px) {
     .container {
