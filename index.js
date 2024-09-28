@@ -1,3 +1,19 @@
+// // CONTROL THE TETROMINO
+// // every key on the keyboard has a code
+// //     38
+// // 37  40  39
+
+// // Colission function
+// // checks if there is a piece in the way before calling the control function
+// // it needs the present coordinates and its future coordinates
+// // if its false it calls the control function, if its true it does not move or rotate the piece
+
+// // Now there is another update in rotate function, if the piecce alongside the wall according to our collision function it will not rotate, but in real life tetris it does rotate, the wall kicks the piece (the right wall kick the piece to the left and the left wall kicks the piece to the right) and then rotation occurs. We have to create the rotate function such that if collision occurs we figure out if the wall is the right one or the left one.
+// //  This can be figured out by Col/2.... if x < Col/2 the wall if the left one and if x > Col/2 the wall is the right one
+
+// // Lock a piece
+// // this means changing the color of the squares of the grid to the piece color
+
 const cvs = document.getElementById("tetris");
 const ctx = cvs.getContext("2d");
 
@@ -5,10 +21,13 @@ const ROW = 20;
 const COL = COLUMN = 10;
 const SQ = squareSize = 30;
 const VACANT = "#e1eeb0"; // color of an empty square
+const scoreShow = document.getElementById("show");
+const maxScoreShow = document.getElementById("show1");
+
+const next = document.getElementById("tetrimino");
 
 let score = 0;
-let currentLevel = 0;
-let linesCleared = 0;
+let max_score = localStorage.getItem('MaxScore');
 
 // draw a square
 function drawSquare(x,y,color, innerColor) {
@@ -185,9 +204,6 @@ Piece.prototype.rotate = function(){
 }
 
 Piece.prototype.lock = function() {
-    let nextPiece = randomPiece();
-    showPiece();
-
     for( r = 0; r < this.activeTetromino.length; r++){
         for(c = 0; c < this.activeTetromino.length; c++){
             // we skip the vacant squares
@@ -196,8 +212,8 @@ Piece.prototype.lock = function() {
             }
             // pieces to lock on top = game over
             if(this.y + r < 0){
-                alert("Game Over");
                 // stop request animation frame
+                showGameOverPopup();
                 gameOver = true;
                 break;
             }
@@ -229,6 +245,12 @@ Piece.prototype.lock = function() {
             }
             // increment the score
             score += 10;
+            if(playAsGuest1)
+                max_score = score;
+            if(isloggedIn) {
+                max_score = localStorage.getItem("MaxScore");
+                localStorage.setItem("MaxScore", max_score);
+            }
         }
     }
     // update the board
@@ -236,10 +258,61 @@ Piece.prototype.lock = function() {
     
     // update the score
     scoreShow.innerHTML = score;
+    maxScoreShow.innerHTML = max_score;
 }
 
-// collision fucntion
+//Game Over popup
+function showGameOverPopup() {
+    var gamePop = document.getElementById('game-pop');
+    gamePop.classList.add('active'); // Display the popup
+}
 
+function closeGameOverPopup() {
+    var gamePop = document.getElementById('game-pop');
+    gamePop.classList.remove('active'); // Display the popup
+}
+
+function startNewGame() {
+    // 1. Reset the game board
+    board = [];
+    for (r = 0; r < ROW; r++) {
+        board[r] = [];
+        for (c = 0; c < COL; c++) {
+            board[r][c] = VACANT; // Set all cells to vacant
+        }
+    }
+    drawBoard(); // Redraw the empty board
+
+    // 2. Reset the score
+    score = 0;
+    max_score = 0;
+    scoreShow.innerHTML = score;
+    maxScoreShow.innerHTML = max_score;
+
+    // 3. Generate a new piece
+    p = randomPiece();
+
+    // 4. Reset game over flag
+    gameOver = false;
+
+    // 5. Start dropping pieces again
+    dropStart = Date.now();
+    drop(); // Call the drop function to start the game loop again
+    closeGameOverPopup();
+}
+
+function exitToMainMenu() {
+    // Set both isLoggedIn and playAsGuest to false when exiting
+    localStorage.setItem('isLoggedIn', 'false');
+    localStorage.setItem('playAsGuest', 'false');
+    
+    // Redirect to the main menu (replace with your main page URL)
+    window.location.href = 'mainPage.html';
+}
+
+
+
+// collision function
 Piece.prototype.collision = function(x,y,piece){
     for( r = 0; r < piece.length; r++){
         for(c = 0; c < piece.length; c++){
@@ -273,6 +346,8 @@ Piece.prototype.collision = function(x,y,piece){
 document.addEventListener("keydown",CONTROL);
 
 function CONTROL(event){
+    if(isPaused)
+        return;
     if(event.keyCode == 37){
         p.moveLeft();
         dropStart = Date.now();
@@ -287,10 +362,16 @@ function CONTROL(event){
     }
 }
 
+let isPaused = false;
+
+
 // drop the piece every 1sec
 let dropStart = Date.now();
 let gameOver = false;
 function drop(){
+    if(isPaused)
+        return;
+
     let now = Date.now();
     let delta = now - dropStart;
     if(delta > 1000){
@@ -302,4 +383,22 @@ function drop(){
     }
 }
 
-drop();
+var playAsGuest1 = localStorage.getItem('playAsGuest');
+var isloggedIn = localStorage.getItem('isLoggedIn');
+if(playAsGuest1 || isloggedIn) {
+    drop();
+}
+
+function togglePause() {
+    isPaused = !isPaused; 
+    var popup = document.getElementById("pause-pop");
+    popup.classList.toggle("active");
+    if (!isPaused)
+        drop();
+    
+}
+
+function toggleEnd() {
+    var popup = document.getElementById("end-pop");
+    popup.classList.toggle("active");
+}
