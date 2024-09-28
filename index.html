@@ -12,21 +12,15 @@
     <div class="container">
         <div class="controls">
             <div class="arrow">
-                Controls:
-                <br />
+                <h3>Controls:</h3>
                 <p>↑</p>
-                ← ↓ →
-                <br />
+                <p>← ↓ →</p>
             </div>
 
             <div class="instruct">
-                <p>Left and Right:</p>
-                <p>move side to side</p>
-                <p class="key">Up: </p>
-                <p>rotate</p>
-                <p class="key">Down:</p>
-                <p>falls faster</p>
-
+                <p><strong>Left and Right:</strong> Move side to side</p>
+                <p><strong>Up:</strong> Rotate</p>
+                <p><strong>Down:</strong> Falls faster</p>
             </div>
         </div>
 
@@ -37,34 +31,51 @@
                 <div class="score">
                     <div class="innerScore">Score</div>
                 </div>
-                <div id="show">0</div>
+                <div id="show" class="display">0</div>
 
-                <div class="max_score"></div>
-                <div class="maxInnerScore">Max Score</div>
+                <div class="max_score">
+                    <div class="maxInnerScore">Max Score</div>
+                </div>
+                <div id="show1" class="display">0</div>
             </div>
-            <div id="show1">0</div>
 
             <div class="pause">
                 <div id="pause-pop" class="popup">
                     <div class="content">
-                        <div class="close-btn" onclick="togglePause()">x</div>
+                        <div class="close-btn" onclick="togglePause()">X</div>
                         <p>Menu</p>
-                        <a><button>Resume Game</button></a>
+                        <button onclick="togglePause()">Resume Game</button>
                         <a href="./mainPage.html"><button>End Game</button></a>
                     </div>
                 </div>
             </div>
 
-            <div class="Pause">
-                <div class="inner">
-                    <a onclick="togglePause()" id="loginBtn">
-                        <button>Pause Game</button>
-                    </a>
+            <div id="game-pop" class="popup">
+                <div class="content">
+                    <div class="close-btn" onclick="closeGameOverPopup()">X</div>
+                    <p>Game Over!</p>
+                    <button onclick="startNewGame()">New Game</button>
+                    <button onclick="exitToMainMenu()">End Game</button>
                 </div>
             </div>
+            
 
+            <div class="Pause">
+                <div class="inner">
+                    <button onclick="togglePause()" id="loginBtn">Pause Game</button>
+                </div>
+            </div>
         </div>
 
+        <!-- On-Screen Mobile Controls -->
+        <div class="mobile-controls">
+            <button id="rotate">↑</button>
+            <div class="left-right">
+                <button id="left">←</button>
+                <button id="right">→</button>
+            </div>
+            <button id="down">↓</button>
+        </div>
     </div>
 
     <script src="login.js"></script>
